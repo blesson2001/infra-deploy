@@ -2,13 +2,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: wwwsybelca-prod
+    app: domain-prod
     tier: prod
-  name: wwwsybelca-prod
+  name: domain-prod
   namespace: production
-  resourceVersion: "544859429"
-  selfLink: /apis/extensions/v1beta1/namespaces/production/deployments/wwwsybelca-prod
-  uid: c6e7672c-d07f-11e8-8fbf-42010af00256
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
