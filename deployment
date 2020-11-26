@@ -1,0 +1,91 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: wwwsybelca-prod
+    tier: prod
+  name: wwwsybelca-prod
+  namespace: production
+  resourceVersion: "544859429"
+  selfLink: /apis/extensions/v1beta1/namespaces/production/deployments/wwwsybelca-prod
+  uid: c6e7672c-d07f-11e8-8fbf-42010af00256
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: wwwsybelca-prod
+      tier: prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: wwwsybelca-prod
+        tier: prod
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: WORDPRESS_DB_HOST
+          value: 35.229.31.98
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: WORDPRESS_DB_USER
+              name: wwwsybelca
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: WORDPRESS_DB_PASSWORD
+              name: wwwsybelca
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              key: WORDPRESS_DB_NAME
+              name: wwwsybelca
+        image: gcr.io/generated-wharf-115823/biliance-wordpress-php-fpm:latest
+        imagePullPolicy: Always
+        name: wwwsybelca-prod
+        ports:
+        - containerPort: 80
+          name: wwwsybelc-port
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 300m
+            memory: 2Gi
+          requests:
+            cpu: 10m
+            memory: 100Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          procMount: Default
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www/html/
+          name: wwwsybelca-prod-hostvol
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        name: biliance-live
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /mnt/glusterfs/Production/www.sybel.ca
+          type: ""
+        name: wwwsybelca-prod-hostvol
+  
